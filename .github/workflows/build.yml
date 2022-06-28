@@ -11,8 +11,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     env:
-      BUILD_CONFIG: "Release"
-      TEST_RESULT_PATH: "TestResults"
+      BUILD_CONFIG: Release
+      TEST_RESULT_PATH: TestResults
     steps:
       - uses: actions/checkout@v3
 
