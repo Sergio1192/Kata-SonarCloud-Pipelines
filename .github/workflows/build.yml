@@ -31,8 +31,10 @@ jobs:
       - name: Test backend
         run: dotnet test --no-build -c $BUILD_CONFIG --logger trx --results-directory $TEST_RESULT_PATH --collect "XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
-      -  name: Test frontend
-         run: npm run test:coverage
+      - name: Test frontend
+        run: |
+          cd src\Kata-SonarCloud-Pipelines\ClientApp
+          npm run test:coverage
 
       - name: End analyze
         env:
