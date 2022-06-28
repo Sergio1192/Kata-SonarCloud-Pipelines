@@ -33,7 +33,7 @@ jobs:
 
       - name: Test frontend
         run: |
-          cd src\Kata-SonarCloud-Pipelines\ClientApp
+          cd src/Kata-SonarCloud-Pipelines/ClientApp
           npm run test:coverage
 
       - name: End analyze
