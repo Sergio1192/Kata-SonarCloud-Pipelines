@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BUILD_CONFIG: Release
+      TEST_RESULT_PATH: TestResults
     steps:
       - uses: actions/checkout@v3
 
@@ -22,13 +23,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: dotnet-sonarscanner begin /k:"Sergio1192_Kata-SonarCloud-Pipelines" /o:"sergio1192-github" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vstest.reportsPaths="**/TestResults/*.trx" /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml"
+        run: dotnet-sonarscanner begin /k:"Sergio1192_Kata-SonarCloud-Pipelines" /o:"sergio1192-github" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vstest.reportsPaths="**/$TEST_RESULT_PATH/*.trx" /d:sonar.cs.opencover.reportsPaths="**/$TEST_RESULT_PATH/**/coverage.opencover.xml" /d:sonar.javascript.lcov.reportPaths="coverage/lcov.info"
 
       - name: Build
         run: dotnet build -c $BUILD_CONFIG
 
-      - name: Test
-        run: dotnet test --no-build -c $BUILD_CONFIG --logger trx --results-directory TestResults --collect "XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+      - name: Test backend
+        run: dotnet test --no-build -c $BUILD_CONFIG --logger trx --results-directory $TEST_RESULT_PATH --collect "XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+
+      -  name: Test frontend
+        run: npm run test:coverage
 
       - name: End analyze
         env:
