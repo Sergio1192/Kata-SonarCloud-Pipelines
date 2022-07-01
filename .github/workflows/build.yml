@@ -37,7 +37,6 @@ jobs:
         run: |
           cd src/Kata-SonarCloud-Pipelines/ClientApp
           npm ci
-          npm run build
           npm run test:coverage
 
       - name: End analyze
